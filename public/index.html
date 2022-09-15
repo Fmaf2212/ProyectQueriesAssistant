@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />    
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <title>Queries Assistant</title>
   </head>
+  <style>
+    ul.transition {
+      list-style: none;
+      display: flex;
+      position: absolute;
+      z-index: 10;
+      height: 100vh;
+      width: 100%;
+      top: 0;
+      left: 0;
+      margin: 0;
+      pointer-events: none;
+      padding: 0;
+    }
+
+    ul.transition li {
+      transform: scaleY(0);
+      background: white;
+      width: 20%;
+    }
+  </style>
   <body>
-    <div id="root"></div>
+    <ul class="transition">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    <div id="root"  data-barba="wrapper"></div>
   </body>
+  <!-- Barba Core -->
+  <script src="https://unpkg.com/@barba/core"></script>
+
+  <!-- GSAP for animation -->
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.4/gsap.min.js"
+  ></script>
+
+  <script src="./index.js"></script>
 </html>

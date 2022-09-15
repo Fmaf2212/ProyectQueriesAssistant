@@ -34,6 +34,11 @@
     color: #fff;
     background-color: transparent;
     outline: 2px solid #fff;
+    transition: .3s ease outline;
+}
+.loginContainer form .input-group .input:autofill{
+    background-color: red;
+    border: 3px solid darkorange;
 }
 
 
@@ -63,10 +68,23 @@
     background-color: 
 } */
 
-.loginContainer form .spanError{
+.loginContainer form .input-spanError{
+    position: relative;
+    width: 100%;
+    margin-top: -30px;
+    margin-bottom: -30px;
+}
+.loginContainer form .input-spanError .spanError{
     color: red;
     font-weight: normal;
     font-size: 0.8rem;
+    line-height: 1.6;
+    position: absolute;
+    opacity: 0;
+}
+.loginContainer form .input-spanError .spanError.active{
+    position: relative;
+    opacity: 1;
 }
 
 .loginContainer form .sendLogin{
@@ -141,7 +159,7 @@
     height: 2px;
     background: linear-gradient(270deg, transparent, #03e9f4);
     animation: btn-anim3 1s linear infinite;
-    animation-delay: .65s;
+    animation-delay: .45s;
 }
 
 @keyframes btn-anim3{
