@@ -2,11 +2,17 @@ import './Queries.css'
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import TextReveal from '../../COMPONENTS/TextReveal/TextReveal'
+import TableFiltrar from '../../COMPONENTS/TableFiltrar/TableFiltrar'
+import Boton from '../../COMPONENTS/Boton'
+
+import logout from '../../BASE/img/logout.png'
+import Inputs from '../../COMPONENTS/Inputs'
+
+import { motion } from 'framer-motion/dist/framer-motion'
 
 const Home = () => {
   const navigate = useNavigate()
-  const [dni, setDni] = useState('')
-  const [nombres, setNombres] = useState('')
 
   const clickLogout = () => {
     localStorage.setItem('loggedQueriesAssistantUser', '')
@@ -20,104 +26,76 @@ const Home = () => {
     if (!loggedInUser) {
       console.log('no hay token')
       navigate('/')
-      // history.push("/Queries");
-      // navigate("/Queries", { replace: true });
     }
   }, [])
 
   const consultarDataCliente = () => {
     console.log('entré en consultarDataCliente')
   }
+  const consultarValidacionMigracion = () => {
+    console.log('entré en consultarValidacionMigracion')
+  }
 
-  useEffect(() => {
-    const dni = document.getElementById('dni')
-    const nombres = document.getElementById('nombres')
-    dni.addEventListener('blur', (event) => {
-      if (event.target.value === '') {
-        event.target.nextElementSibling.classList.remove('filled')
-      } 
-    })
-    dni.addEventListener('click', (event) => {
-      console.log('entré en click')
-      if (event.target.value === '') {
-        event.target.nextElementSibling.classList.add('filled')
-      } 
-    })
-    nombres.addEventListener('blur', (event) => {
-      if (event.target.value === '') {
-        event.target.nextElementSibling.classList.remove('filled')
-      } 
-    })
-    nombres.addEventListener('click', (event) => {
-      if (event.target.value === '') {
-        event.target.nextElementSibling.classList.add('filled')
-      } 
-    })
 
-  }, [])
   return (
-    <div
+    <motion.div
       className="homeContainer"
       data-barba="container"
       data-barba-namespace="queries"
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      exit={{opacity: 0}}
     >
       <header>
-        <span>HOME</span>
         <nav>
-          <ul>
-            {}
-            <li>
-              <button onClick={clickLogout}>Logout</button>
-            </li>
-          </ul>
+          <div className="navigation">
+            <a onClick={()=>clickLogout()} className="button" href="#">
+              <img src={logout} alt='logout'/>
+              <div className="logout">LOGOUT</div>
+            </a>
+          </div>
         </nav>
       </header>
-      <main>
-        <h1>
-          <span style={"--delay: .5s"}>HOLA</span>
-          <span style={"--delay: .8s"}>CESAR</span>
-        </h1>
+      <main className="mainQueries">
+        <TextReveal />
         <form onSubmit={consultarDataCliente}>
           <section className="sectionInputsFiltrar">
             <div className="input-container">
-              <input
-                // value={dni}
-                type="text"
-                id="dni"
-                autoComplete='on'
-                className="text-input"
-                placeholder="Ingrese el DNI"
-                name="dni"
-                onChange={(e) => {
-                  setDni(e.target.value)
-                }}
-              />
+              <Inputs id='dni' placeholder="Ingrese el DNI" type="text"/>
               <label htmlFor="dni" className="label">
                 DNI:
               </label>
             </div>
+
             <div className="input-container">
-              <input
-                type="text"
-                id="nombres"
-                autoComplete="off"
-                placeholder="Ingrese nombres y apellidos"
-                className="text-input"
-                name="nombres"
-                onChange={(e) => setNombres(e.target.value)}
-              />
+              <Inputs id='nombres' placeholder="Ingrese nombres y apellidos" type="text"/>
               <label htmlFor="nombres" className="label">
                 NOMBRES - APELLIDOS:
               </label>
             </div>
-            <div>
-              <input className="inputFiltrar" type="submit" value="Filtrar" />
+            <div className="btn">
+              <Boton id="Filtrar" />
             </div>
           </section>
-          <div></div>
+          <TableFiltrar data={["Estado","Id Cliente","Última compra > 20ptos","Puntos"]} />      
+        </form>
+        <form onSubmit={consultarValidacionMigracion}>
+          <section className="sectionInputsFiltrar">
+            <div className="input-container">
+              <Inputs id='dniValidarMigracion' placeholder="Ingrese el DNI" type="text"/>
+              <label htmlFor="dniValidarMigracion" className="label">
+                DNI:
+              </label>
+            </div>
+
+            <div className="btn">
+              <Boton id="Validar"/>
+            </div>
+          </section>
+          <TableFiltrar data={["Id Cliente","Tipo Socio","Última compra"]} />
         </form>
       </main>
-    </div>
+    </motion.div>
   )
 }
 

@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useNavigate  } from "react-router-dom";
 
 import axios from 'axios'
+import Loader from '../../COMPONENTS/Loader/Loader';
+
+import { motion } from 'framer-motion/dist/framer-motion'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,14 +15,16 @@ const Login = () => {
   const [token, setToken] = useState('');
   const [error, setError] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   // var URLactual = window.location;
   // console.log(URLactual);
   useEffect(() => {
 
     const loggedInUser = window.localStorage.getItem("loggedQueriesAssistantUser");
-    console.log(loggedInUser);
+    // console.log(loggedInUser);
     if (loggedInUser) {
-      console.log('si hay token')
+      // console.log('si hay token')
       navigate("/Queries");
       // history.push("/Queries");
       // navigate("/Queries", { replace: true });
@@ -42,7 +47,7 @@ const Login = () => {
 
   const validarLogin = async(e) => {   
     e.preventDefault();
-
+    setLoading(true);
     let url = "https://api.santanaturaws.com/api/Acces/Login";
     try{
       const respuesta = await axios({
@@ -53,7 +58,7 @@ const Login = () => {
           password: contraseña
         }
       });
-      console.log(respuesta)
+      console.log(typeof respuesta)
       if(respuesta.data.message !== "Acceso denegado"){
         setUsuario("");
         setContraseña("");
@@ -67,6 +72,7 @@ const Login = () => {
     }catch(error){
       console.log(error)
     }
+    setLoading(false);
 
     // if (!authenticated) {    
       // const account = users.find((user) => user.usu === usuario);
@@ -84,7 +90,14 @@ const Login = () => {
   }
 
   return (
-    <div className="loginContainer" data-barba="container" data-barba-namespace="login">
+    <motion.div 
+      className="loginContainer" 
+      // data-barba="container" 
+      // data-barba-namespace="login"
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      exit={{opacity: 0}}
+      >
       <h1>Iniciar Sesión</h1>
       <form onSubmit={validarLogin}>
         <div className="input-group">
@@ -116,6 +129,7 @@ const Login = () => {
             Contraseña:
           </label>
         </div>
+        {loading && <Loader />}
         <div className="input-spanError">
           <span className={`spanError ${error ? 'active' : null}`}>Usuario o contraseña incorrecta. Por favor, vuelve a intentarlo nuevamente.</span>
         </div>
@@ -127,7 +141,7 @@ const Login = () => {
           <input className="inputLogin" type="submit" value="Iniciar Sesión" />
         </div>
       </form>
-    </div>
+    </motion.div>
   )
 }
 

@@ -75,7 +75,7 @@
     margin-bottom: -30px;
 }
 .loginContainer form .input-spanError .spanError{
-    color: red;
+    color: #dc3545;
     font-weight: normal;
     font-size: 0.8rem;
     line-height: 1.6;

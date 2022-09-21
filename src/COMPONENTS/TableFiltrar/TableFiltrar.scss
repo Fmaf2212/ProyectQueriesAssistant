@@ -1,0 +1,45 @@
+.sectionTableResultadosFiltrado{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    .styled-table {
+        border-collapse: collapse;
+        margin: 0;
+        font-size: 1em;
+        font-family: sans-serif;
+        width: 100%;
+        max-width: 880px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+      .styled-table thead tr {
+        background-color: #7e4ccb;
+        color: #ffffff;
+        text-align: middle;
+      }
+      .styled-table th,
+      .styled-table td {
+        padding: 12px 15px;
+      }
+      .styled-table thead tr{
+        border-radius: 10px 10px 0 0;
+      }
+      .styled-table th:nth-child(1){
+        border-radius: 10px 0 0 0;
+      }
+      .styled-table th:nth-last-child(1){
+        border-radius: 0 10px 0 0;
+      }
+      .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+      .styled-table tbody tr:nth-of-type(even) {
+        background-color: rgba(255,255,255,0.3);
+      }
+      .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+      }
+}
+
+
+  
