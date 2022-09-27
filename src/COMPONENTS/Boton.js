@@ -1,6 +1,6 @@
 import icon from '../BASE/img/icon.svg'
 
-const boton = ({id}) => {
+const boton = ({id, funcion}) => {
     // console.log(id)
     function alPasarPuntero(e) {
         const filtrar = document.getElementById(`${id}`)
@@ -22,6 +22,7 @@ const boton = ({id}) => {
       className="inputFiltrar"
       type="submit"
       value="Filtrar"
+      onClick={(e) => funcion(e)}
     >
       <img src={icon} alt="icon" />
       {id}

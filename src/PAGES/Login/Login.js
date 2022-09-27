@@ -2,17 +2,20 @@ import './Login.css'
 import { useState, useEffect } from "react";
 import { useNavigate  } from "react-router-dom";
 
+import { getToken, setToken } from '../Helpers/auth-helpers.js'
+
 import axios from 'axios'
 import Loader from '../../COMPONENTS/Loader/Loader';
 
-import { motion } from 'framer-motion/dist/framer-motion'
+import { motion } from 'framer-motion'
+
 
 const Login = () => {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
   // const [authenticated, setauthenticated] = useState('');
-  const [token, setToken] = useState('');
+  // const [token, setToken] = useState('');
   const [error, setError] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -20,16 +23,10 @@ const Login = () => {
   // var URLactual = window.location;
   // console.log(URLactual);
   useEffect(() => {
-
-    const loggedInUser = window.localStorage.getItem("loggedQueriesAssistantUser");
-    // console.log(loggedInUser);
-    if (loggedInUser) {
-      // console.log('si hay token')
+    if (getToken()) {
+      // Si me he logueado y tengo token, que me redireccione a la página Queries
       navigate("/Queries");
-      // history.push("/Queries");
-      // navigate("/Queries", { replace: true });
     }
-  
 }, []);
 
   // siEstoyEnLogin();
@@ -58,11 +55,12 @@ const Login = () => {
           password: contraseña
         }
       });
-      console.log(typeof respuesta)
-      if(respuesta.data.message !== "Acceso denegado"){
+      console.log(respuesta)
+      if(respuesta.data.result === 1){
         setUsuario("");
         setContraseña("");
-        window.localStorage.setItem("loggedQueriesAssistantUser", respuesta.data.data);
+        // window.localStorage.setItem("loggedQueriesAssistantUser", respuesta.data.data.accesToken);
+        setToken(respuesta.data.data.accesToken);
         navigate("/Queries");
       }else{
         setError(true);
@@ -73,20 +71,6 @@ const Login = () => {
       console.log(error)
     }
     setLoading(false);
-
-    // if (!authenticated) {    
-      // const account = users.find((user) => user.usu === usuario);
-      // if (account && account.contra === contraseña) {
-      //   localStorage.setItem("authenticated", true);
-      //   navigate("/Queries");
-      // }
-      // else {
-      //   setError(true);
-      // }
-    // }
-    // else{  
-    //   console.log('hola');
-    // }
   }
 
   return (
@@ -94,6 +78,9 @@ const Login = () => {
       className="loginContainer" 
       // data-barba="container" 
       // data-barba-namespace="login"
+      // initial={{ width: 0 }}
+      // animate={{ width: "100%" }}
+      // exit={{ x: window.innerWidth, transition: { duration: 0.5} }}
       initial={{opacity: 0}}
       animate={{opacity: 1}}
       exit={{opacity: 0}}
