@@ -15,8 +15,7 @@ const boton = ({id, funcion}) => {
         }, 600)
       }
   return (
-    <a
-      href="#"
+    <button
       onMouseEnter={(e) => alPasarPuntero(e)}
       id={id}
       className="inputFiltrar"
@@ -26,7 +25,7 @@ const boton = ({id, funcion}) => {
     >
       <img src={icon} alt="icon" />
       {id}
-    </a>
+    </button>
   )
 }
 

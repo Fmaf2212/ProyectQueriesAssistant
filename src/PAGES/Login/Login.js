@@ -27,7 +27,7 @@ const Login = () => {
       // Si me he logueado y tengo token, que me redireccione a la página Queries
       navigate("/Queries");
     }
-}, []);
+}, [navigate]);
 
   // siEstoyEnLogin();
   
@@ -60,7 +60,7 @@ const Login = () => {
         setUsuario("");
         setContraseña("");
         // window.localStorage.setItem("loggedQueriesAssistantUser", respuesta.data.data.accesToken);
-        setToken(respuesta.data.data.accesToken);
+        setToken(JSON.stringify(respuesta.data.data));
         navigate("/Queries");
       }else{
         setError(true);

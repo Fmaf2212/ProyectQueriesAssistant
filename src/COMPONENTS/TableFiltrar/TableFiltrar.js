@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+// import { useState, useEffect } from 'react'
 
 import './TableFiltrar.scss'
 
@@ -10,6 +10,14 @@ const TableFiltrar = (props) => {
   props.data.forEach((th, index) => {
     names.push(<th key={index}>{th}</th>)
   })
+  // console.log(props.resultado)
+  // const res = []
+  // props.resultado.forEach((td, index) => {
+  //   res.push(<tr><td key={index}>{td}</td></tr>)
+  // })
+
+
+
   // let finalData = props.data1
   // const newArray = finalData.map(numero =>{
   //   return numero
@@ -33,23 +41,19 @@ const TableFiltrar = (props) => {
       <table id="tabla" className="styled-table">
         <thead>
           <tr>
-            {
-              names
-            }
+            {names}
             {/* <th>{props.data1[0]}</th>
             <th>{props.data1[1]}</th>
             <th>{props.data1[2]}</th>
             <th>{props.data1[3]}</th> */}
           </tr>
         </thead>
-        <tbody>
-          {/* <tr>
-            <td>Activo</td>
+        {/* <tbody id="tbody">
+          <td>Activo</td>
             <td>C0125</td>
             <td>16/05/2022</td>
             <td>26</td>
-          </tr> */}
-        </tbody>
+        </tbody> */}
       </table>
     </section>
   )

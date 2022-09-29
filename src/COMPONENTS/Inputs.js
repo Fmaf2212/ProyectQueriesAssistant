@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 
-const Inputs = ({id,placeholder,type}) => {
+const Inputs = ({id,placeholder,type, setDni, setResultadito}) => {
     useEffect(() => {
         const dni = document.getElementById(`${id}`)
         const nombres = document.getElementById('nombres')
@@ -36,7 +36,7 @@ const Inputs = ({id,placeholder,type}) => {
             event.target.nextElementSibling.classList.add('filled')
           }
         })
-      }, [])
+      }, [id])
     
     
 
@@ -49,7 +49,8 @@ const Inputs = ({id,placeholder,type}) => {
       className="text-input"
       placeholder={placeholder}
       name={id}
-      onFocus={(e) => e.target.nextElementSibling.classList.add('filled')}
+      onFocus={(e) => e.target.nextElementSibling.classList.add('filled')}      
+      onChange={(e) => setDni(e.target.value)}
     />
   )
 }
