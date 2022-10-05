@@ -1,7 +1,12 @@
+$smartphone: 767px;
+$tablet: 1023px;
+$desktop: 1024px;
+
 .sectionTableResultadosFiltrado{
     display: flex;
     justify-content: center;
     width: 100%;
+
     .styled-table {
         border-collapse: collapse;
         margin: 0;
@@ -19,6 +24,8 @@
       .styled-table th,
       .styled-table td {
         padding: 12px 15px;
+        text-align: center;
+        font-size: calc(0.6em + 0.6vw);
       }
       .styled-table thead tr{
         border-radius: 10px 10px 0 0;
@@ -38,9 +45,6 @@
       }
       .styled-table tbody tr:last-of-type {
         border-bottom: 2px solid #009879;
-      }
-      .styled-table tbody tr td {
-        text-align: center;
       }
 }
 

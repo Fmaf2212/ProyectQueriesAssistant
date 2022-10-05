@@ -9,23 +9,26 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  position: relative;
+  z-index: 9;
 }
 .homeContainer header nav ul {
   list-style: none;
 }
 
 .homeContainer .mainQueries {
-  height: calc(100vh - 55px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 40px;
   padding: 0 5%;
+  margin-top: -30px;
 }
 .homeContainer .mainQueries h1 {
   color: #fff;
   font-weight: bold;
+  margin: 0;
+  font-size: calc(1em + 1vw);
 }
 
 .homeContainer .mainQueries .form {
@@ -39,7 +42,8 @@
 .homeContainer .mainQueries .form .sectionInputsFiltrar {
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;
+  column-gap: 50px;
+  row-gap: 30px;
   justify-content: space-evenly;
   width: 100%;
 }
@@ -67,6 +71,7 @@
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
+  font-size: calc(0.5em + 0.6vw);
 }
 .homeContainer .mainQueries .form .sectionInputsFiltrar .text-input {
   padding: 0.8rem;
@@ -76,11 +81,12 @@
   border: 2px solid #2f2c45;
   background-color: #272530;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: calc(0.5em + 0.5vw);
   outline: none;
   transition: all 0.3s;
   color: #fff;
   text-overflow: ellipsis;
+  
 }
 .homeContainer .mainQueries .form .sectionInputsFiltrar .label::before {
   content: '';
@@ -93,7 +99,7 @@
   z-index: -1;
 }
 .homeContainer .mainQueries .form .sectionInputsFiltrar #nombres+.label::before {
-  width: 154px;
+  width: 164px;
 }
 .homeContainer
   .mainQueries
@@ -106,9 +112,6 @@
 .homeContainer .mainQueries .form .sectionInputsFiltrar .text-input:focus {
   border: 2px solid #7e4ccb;
 }
-/* .homeContainer .mainQueries form .sectionInputsFiltrar .text-input:not(:focus){
-    border: 2px solid #2f2c45;
-} */
 .homeContainer
   .mainQueries
   form
@@ -122,15 +125,8 @@
 .homeContainer .mainQueries .form .sectionInputsFiltrar .filled {
   top: -10px;
   color: #7e4ccb;
-  font-size: 14px;
+  font-size: calc(.4em + .6vw);
 }
-/* .homeContainer .mainQueries form .sectionInputsFiltrar .text-input:not(:focus) + 
-.homeContainer .mainQueries form .sectionInputsFiltrar .label,
-.homeContainer .mainQueries form .sectionInputsFiltrar .filled{
-    top: 14px;
-    color: #fff;
-    font-size: 18px;
-} */
 .homeContainer
   .mainQueries
   .form
@@ -139,6 +135,7 @@
   font-size: 18px;
   opacity: 0;
   transition: opacity 0.3s ease;
+  font-size: calc(.5em + .7vw);
 }
 .homeContainer
   .mainQueries
@@ -169,7 +166,7 @@
   border-radius: 30px;
   text-decoration: none;
   color: #fff;
-  font-size: 14px;
+  font-size: calc(0.4em + 0.6vw);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -214,58 +211,7 @@
 }
 
 /* --------------------------- */
-.navigation {
-  width: 100%;
-  background-color: black;
-}
-
-.navigation img {
-  width: 25px;
-  border-radius: 50px;
-  float: left;
-}
-
-.navigation .logout {
-  font-size: 0.8em;
-  font-family: 'Oswald', sans-serif;
-  position: relative;
-  right: -5px;
-  bottom: -5px;
-  overflow: hidden;
-  letter-spacing: 3px;
-  opacity: 0;
-  transition: opacity 0.45s;
-  -webkit-transition: opacity 0.35s;
-}
-
-.navigation .button {
-  text-decoration: none;
-  float: right;
-  padding: 12px;
-  margin: 15px;
-  color: white;
-  width: 55px;
-  background-color: black;
-  transition: width 0.35s;
-  -webkit-transition: width 0.35s;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.navigation .button:hover {
-  width: 130px;
-}
-
-.navigation .button:hover .logout {
-  opacity: 0.9;
-}
-
-.navigation .button {
-  text-decoration: none;
-}
-
-/* ------------------------------- */
-
+ 
 .ac-container > div > label {
   height: auto !important;
   line-height: .8 !important;
@@ -296,7 +242,7 @@
 
 .ac-container {
   width: 100%;
-  margin: 10px auto 30px auto;
+  margin: 30px auto;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -319,11 +265,6 @@
   height: 24px;
   right: 13px;
   top: 7px;
-  /* background: transparent url(../images/arrow_down.png) no-repeat center center; */
-}
-
-.ac-container input:checked + label:hover:after {
-  /* background-image: url(../images/arrow_up.png); */
 }
 
 .ac-container > div > input {
@@ -372,4 +313,28 @@
 
 .ac-container input:checked ~ article.ac-large {
   height: 230px;
+}
+
+
+@media screen and (max-width: 767px){
+    .navigation{
+      opacity: 0;
+    }
+    .homeContainer{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .homeContainer
+    .mainQueries
+    .form
+    .sectionInputsFiltrar
+    .text-input::placeholder {
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: calc(.9em + .9vw);
+  }
+
 }

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 
-const Inputs = ({id,placeholder,type, setDni, setResultadito}) => {
+const Inputs = ({id,placeholder,type, setDni, setNombres, setResultadito}) => {
     useEffect(() => {
         const dni = document.getElementById(`${id}`)
         const nombres = document.getElementById('nombres')
@@ -50,7 +50,7 @@ const Inputs = ({id,placeholder,type, setDni, setResultadito}) => {
       placeholder={placeholder}
       name={id}
       onFocus={(e) => e.target.nextElementSibling.classList.add('filled')}      
-      onChange={(e) => setDni(e.target.value)}
+      onChange={(e) => {setDni(e.target.value); setNombres(e.target.value)}}
     />
   )
 }

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {
-  deleteToken,
   initAxiosInterceptors,
   getToken,
 } from '../Helpers/auth-helpers.js'
@@ -15,19 +14,18 @@ import Boton from '../../COMPONENTS/Boton'
 
 import axios from 'axios'
 
-import logout from '../../BASE/img/logout.png'
 import Inputs from '../../COMPONENTS/Inputs'
 
 import { motion } from 'framer-motion'
 
 import Loader from '../../COMPONENTS/Loader/Loader'
+import Logout from '../../COMPONENTS/Logout/Logout'
+import Footer from '../../COMPONENTS/Footer/Footer'
 
 initAxiosInterceptors()
 
 const Home = () => {
   const navigate = useNavigate()
-  // const [result, setResult] = useState();
-  // const token = "	32c5250c-51e0-439b-8a9c-8e869666495d";
 
   const [dni, setDni] = useState('')
   const [nombres, setNombres] = useState('')
@@ -36,36 +34,18 @@ const Home = () => {
 
   const dataLocalStorage = getToken()
 
-  // const [resultadito, setResultadito] = useState([]);
-
-  const clickLogout = () => {
-    console.log('entré en clickLogout')
-    // localStorage.setItem('loggedQueriesAssistantUser', '')
-    deleteToken()
-    navigate('/')
-  }
-
   useEffect(() => {
     console.log('entré en useEffect')
     const loggedInUser = window.localStorage.getItem(
       'loggedQueriesAssistantUser',
     )
-    // console.log(Object.values(loggedInUser));
-    // console.log(JSON.parse(loggedInUser).accesToken);
+
     if (!loggedInUser) {
       console.log('no hay token')
       navigate('/')
     }
   }, [navigate])
 
-  // useEffect(()=>{
-  //   fetch('https://api.santanaturaws.com/api/Room/ListClientState', {
-  //     method: "POST",
-  //     headers: {"Authorization": `Bearer ${token}`}
-  //   })
-  //   .then(res => res.json())
-  //   .then(json => setResult(json));
-  // },[]);
   const consultarDataCliente = async (e) => {
     e.preventDefault()
     // setResultadito([])
@@ -105,37 +85,22 @@ const Home = () => {
           documento: dni,
         },
       })
-      // --------------------------
-      // setResultadito(respuesta.data.data)
-      // let tabla = document.getElementById('tabla')
-      // let tbody = document.createElement('tbody')
-      // // let tablaTbody = document.querySelector('#tabla > tbody')
-      // console.log(tbody.childElementCount)
-      // tabla.appendChild(tbody)
 
       if (tbody > 0) {
         // el tbody tiene hijos
         console.log('el tbody tiene hijos')
-
-        // tablaTbody.parentNode.removeChild(tbody);
       } else {
         // el tbody no tiene hijos
         console.log('el tbody no tiene hijos')
-        // tabla.appendChild(tbody)
         let row, cell
         for (let i = 0; i < respuesta.data.data.length; i++) {
           console.log('entré en for (let i = 0; i < resultadito.length; i++)')
           row = document.createElement('tr')
           tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
           console.log(respuesta.data.data[i])
-          // for (let j = 0; j < props.resultado[i].length; j++) {
-          //   cell = document.createElement("td");
-          //   row.appendChild(cell);
-          // }
           for (let propiedad in respuesta.data.data[i]) {
             console.log(respuesta.data.data[i][propiedad])
             cell = document.createElement('td')
-            // cell.textContent(`${props.resultado[i][propiedad]}`);
             cell.textContent = `${respuesta.data.data[i][propiedad]}`
             row.appendChild(cell)
           }
@@ -157,25 +122,21 @@ const Home = () => {
       // data-barba="container"
       // data-barba-namespace="queries"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0 }}
     >
       <header>
         <nav>
-          <div className="navigation">
-            <button onClick={() => clickLogout()} className="button">
-              <img src={logout} alt="logout" />
-              <div className="logout">LOGOUT</div>
-            </button>
-            {/* <a onClick={()=>clickLogout()} className="button" href="#">
-              <img src={logout} alt='logout'/>
-              <div className="logout">LOGOUT</div>
-            </a> */}
-          </div>
+          <Logout />
         </nav>
       </header>
       <main className="mainQueries">
-        <TextReveal nombres={JSON.parse(dataLocalStorage).name} />
+        {
+          dataLocalStorage
+          ? <TextReveal nombres={JSON.parse(dataLocalStorage).name} />
+          : null
+        }
+        {/* <TextReveal nombres={JSON.parse(dataLocalStorage).name} /> */}
         {/* <>
         {JSON.stringify(result)}
         </> */}
@@ -187,7 +148,7 @@ const Home = () => {
               type="radio"
               defaultChecked=""
             />
-            <label htmlFor="ac-1">About us</label>
+            <label htmlFor="ac-1">Estado actual del cliente</label>
             <article className="ac-small">
               <div className="form">
                 <section className="sectionInputsFiltrar">
@@ -197,6 +158,7 @@ const Home = () => {
                       placeholder="Ingrese el DNI"
                       type="text"
                       setDni={setDni}
+                      setNombres={setNombres}
                       //  setResultadito={setResultadito}
                     />
                     <label htmlFor="dni" className="label">
@@ -208,7 +170,8 @@ const Home = () => {
                     <Inputs
                       id="nombres"
                       placeholder="Ingrese nombres y apellidos"
-                      type="text"
+                      type="text"                      
+                      setDni={setDni}
                       setNombres={setNombres}
                     />
                     <label htmlFor="nombres" className="label">
@@ -223,7 +186,7 @@ const Home = () => {
                   data={[
                     'Estado',
                     'Id Cliente',
-                    'Última compra > 20ptos',
+                    'Última compra',
                     'Puntos',
                   ]}
                 />
@@ -233,7 +196,7 @@ const Home = () => {
           </div>
           <div>
             <input id="ac-2" name="accordion-1" type="radio" />
-            <label htmlFor="ac-2">How we work</label>
+            <label htmlFor="ac-2">Validación de migración</label>
             <article className="ac-medium">
               <div className="form">
                 <section className="sectionInputsFiltrar">
@@ -261,6 +224,7 @@ const Home = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </motion.div>
   )
 }
