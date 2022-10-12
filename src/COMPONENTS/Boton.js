@@ -1,4 +1,4 @@
-import icon from '../BASE/img/icon.svg'
+// import icon from '../BASE/img/icon.svg'
 
 const boton = ({id, funcion}) => {
     // console.log(id)
@@ -15,17 +15,17 @@ const boton = ({id, funcion}) => {
         }, 600)
       }
   return (
-    <button
-      onMouseEnter={(e) => alPasarPuntero(e)}
+    <input
+      // onMouseEnter={(e) => alPasarPuntero(e)}
       id={id}
       className="inputFiltrar"
       type="submit"
       value="Filtrar"
-      onClick={(e) => funcion(e)}
-    >
-      <img src={icon} alt="icon" />
-      {id}
-    </button>
+      // onClick={(e) => funcion(e)}
+    />
+    //   {/* <img src={icon} alt="icon" /> */}
+    //   {/* {id}  */}
+    // {/* </input> */}
   )
 }
 

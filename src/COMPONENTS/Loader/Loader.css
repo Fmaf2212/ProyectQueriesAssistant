@@ -1,8 +1,12 @@
+.sectionLoader{
+  display: flex;
+}
 .lds-ripple {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
+  margin: auto;
 }
 .lds-ripple div {
   position: absolute;

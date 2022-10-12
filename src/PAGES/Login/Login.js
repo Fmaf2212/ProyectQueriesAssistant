@@ -45,7 +45,7 @@ const Login = () => {
   const validarLogin = async(e) => {   
     e.preventDefault();
     setLoading(true);
-    let url = "https://api.santanaturaws.com/api/Acces/Login";
+    let url = "https://api.mundosantanatura.com/api/Acces/Login";
     try{
       const respuesta = await axios({
         method: 'post',

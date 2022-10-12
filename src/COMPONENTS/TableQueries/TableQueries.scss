@@ -4,17 +4,20 @@ $desktop: 1024px;
 
 .sectionTableResultadosFiltrado{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
+    min-height: .01%;
+    overflow-x: auto;
 
     .styled-table {
         border-collapse: collapse;
-        margin: 0;
+        margin: 0 auto;
         font-size: 1em;
         font-family: sans-serif;
         width: 100%;
         max-width: 880px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        min-width: 563px;
       }
       .styled-table thead tr {
         background-color: #7e4ccb;

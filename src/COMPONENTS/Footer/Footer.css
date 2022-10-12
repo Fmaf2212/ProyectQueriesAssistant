@@ -122,10 +122,8 @@ footer{
 }
 
 
-@media screen and (max-width: 767px){
-
+@media screen and (max-device-width: 767px){
     footer{
         display: block;
     }
-    
 }
