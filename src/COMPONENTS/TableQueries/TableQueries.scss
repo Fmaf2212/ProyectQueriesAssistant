@@ -1,3 +1,4 @@
+$smartphone-320px: 320px;
 $smartphone: 767px;
 $tablet: 1023px;
 $desktop: 1024px;
@@ -29,6 +30,11 @@ $desktop: 1024px;
         padding: 12px 15px;
         text-align: center;
         font-size: calc(0.6em + 0.6vw);
+
+        @media screen and (max-device-width: $smartphone-320px) {
+          font-size: calc(0.55em + 0.55vw);
+          padding: 10px 0px;
+        }
       }
       .styled-table thead tr{
         border-radius: 10px 10px 0 0;

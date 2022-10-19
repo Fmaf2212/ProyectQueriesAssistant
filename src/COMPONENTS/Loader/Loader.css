@@ -18,6 +18,15 @@
 .lds-ripple div:nth-child(2) {
   animation-delay: -0.5s;
 }
+
+@media screen and (max-device-width: 320px){
+  .lds-ripple{
+    height: 56px;
+  }
+  .lds-ripple div {
+    animation: lds-ripple-smartphone-320px 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  }
+}
 @keyframes lds-ripple {
   0% {
     top: 36px;
@@ -45,6 +54,37 @@
     left: 0px;
     width: 72px;
     height: 72px;
+    opacity: 0;
+  }
+}
+
+@keyframes lds-ripple-smartphone-320px {
+  0% {
+    top: 28px;
+    left: 28px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  4.9% {
+    top: 28px;
+    left: 28px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  5% {
+    top: 28px;
+    left: 28px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0px;
+    left: 0px;
+    width: 56px;
+    height: 56px;
     opacity: 0;
   }
 }

@@ -1,6 +1,18 @@
 import { useEffect } from 'react'
 
-const Inputs = ({ id, placeholder, type, setDni, setNombres, setDebeIngresarDatos }) => {
+const Inputs = ({
+  id,
+  placeholder,
+  type,
+  setDni,
+  setNombres,
+  setDniValidMigra,
+  setDniEstadoCompras,
+  setTicket,
+  setDebeIngresarDatos,
+  setDebeIngresarDatos2,
+  setDebeIngresarDatos3,
+}) => {
   useEffect(() => {
     const dni = document.getElementById(`${id}`)
     const nombres = document.getElementById('nombres')
@@ -38,22 +50,33 @@ const Inputs = ({ id, placeholder, type, setDni, setNombres, setDebeIngresarDato
   }, [id])
 
   const handleChange = (e) => {
-    console.log(setDni)
-    console.log(setNombres)
+    if (setDni !== '' || setNombres !== '' || setDniValidMigra !== '' || setDniEstadoCompras !== '' || setTicket !== '') {
+      if (setDni !== undefined) {
+        setDni(e.target.value)
+      }
+      if (setNombres !== undefined) {
+        setNombres(e.target.value)
+      }
+      if (setDniValidMigra !== undefined) {
+        setDniValidMigra(e.target.value)
+      }
+      if (setDniEstadoCompras !== undefined) {
+        setDniEstadoCompras(e.target.value)
+      }
+      if (setTicket !== undefined) {
+        setTicket(e.target.value)
+      }
+      if (setDni !== undefined || setNombres !== undefined) {
+        setDebeIngresarDatos(false)
+      }
+      if (setDniValidMigra !== undefined) {
+        setDebeIngresarDatos2(false)
+      }
+      if (setDniEstadoCompras !== undefined || setTicket !== undefined) {
+        setDebeIngresarDatos3(false)
+      }
 
-    if(setDni !== '' || setNombres !== ''){
-      console.log('entré en el if de handleChange')
-      if(setDni !== undefined){
-        console.log('entré en setDni')
-        setDni(e.target.value);
-      }
-      if(setNombres !== undefined){
-        console.log('entré en setNombres')
-        setNombres(e.target.value);
-      }
-      setDebeIngresarDatos(false)
-    }
-    else{
+    } else {
       console.log('Ambos campos no tienen datos')
     }
   }

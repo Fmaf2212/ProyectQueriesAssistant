@@ -26,14 +26,29 @@ const Home = () => {
 
   const [dni, setDni] = useState('')
   const [nombres, setNombres] = useState('')
-  // const [dni2, setDni2] = useState('')
+  const [dniValidMigra, setDniValidMigra] = useState('')
+  const [dniEstadoCompras, setDniEstadoCompras] = useState('')
+  const [ticket, setTicket] = useState('')
+  const [msgError, setMsgError] = useState('')
 
   const [loading, setLoading] = useState(false)
 
-  const [debeIngresarDatos, setDebeIngresarDatos] = useState(false);
+  const [debeIngresarDatos, setDebeIngresarDatos] = useState(false)
+  const [debeIngresarDatos2, setDebeIngresarDatos2] = useState(false)
+  const [debeIngresarDatos3, setDebeIngresarDatos3] = useState(false)
 
   const dataLocalStorage = getToken()
-  console.log(dataLocalStorage)
+
+  const obj = [
+    {
+      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C07239') ? JSON.parse(dataLocalStorage).idClient : null}`,
+      lstTabla: ['bloque01']
+    },
+    {
+      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C13564') ? JSON.parse(dataLocalStorage).idClient : null}`,
+      lstTabla: ['bloque02']
+    }
+  ]
 
   useEffect(() => {
     console.log('entré en useEffect')
@@ -45,6 +60,27 @@ const Home = () => {
       console.log('no hay token')
       navigate('/')
     }
+
+
+    if(!!dataLocalStorage){
+      obj.forEach(element => {
+        console.log(element);
+      });
+      
+      const existeUsuario = obj.findIndex(usu  => usu.idSocio === JSON.parse(dataLocalStorage).idClient);
+      const objUsuSeleccionado = obj[existeUsuario];
+      (objUsuSeleccionado.lstTabla).forEach(element => {
+        console.log(element)
+        document.getElementById(element).style.display="block";
+      });
+    }
+
+    // obj.forEach(element => {
+    //   console.log(element)
+    //   if(element.idSocio="C13564"){
+    //     console.log(element)
+    //   }
+    // });
   }, [navigate])
 
   const consultarDataCliente = async (e) => {
@@ -70,8 +106,7 @@ const Home = () => {
     setLoading(true)
     setDebeIngresarDatos(false)
 
-    if(dni !== '' || nombres !== ''){
-
+    if (dni !== '' || nombres !== '') {
       let url = 'https://api.mundosantanatura.com/api/Room/ListClientState'
       try {
         const respuesta = await axios({
@@ -98,8 +133,16 @@ const Home = () => {
             row = document.createElement('tr')
             tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
             console.log(respuesta.data.data[i])
-            let myObject = respuesta.data.data[i];
+            let myObject = respuesta.data.data[i]
+            // Para cuando se necesite eliminar algunos campos del objeto.
             // var {puntosPeriodo, idPeriodo, ...myUpdateObject} = myObject;
+            // for (let propiedad in myUpdateObject) {
+            //   console.log(myUpdateObject[propiedad])
+            //   cell = document.createElement('td')
+            //   cell.textContent = `${myUpdateObject[propiedad]}`
+            //   row.appendChild(cell)
+            // }
+            // Para cuando no se necesite eliminar campos del objeto.
             for (let propiedad in myObject) {
               console.log(myObject[propiedad])
               cell = document.createElement('td')
@@ -111,8 +154,7 @@ const Home = () => {
       } catch (error) {
         console.log(error)
       }
-
-    } else{
+    } else {
       setDebeIngresarDatos(true)
       console.log('debeIngresarDatos es true')
     }
@@ -126,7 +168,7 @@ const Home = () => {
     if (document.getElementById('tbodyValidar')) {
       document
         .getElementById('idTableValidar')
-        .removeChild(document.getElementById('tbody'))
+        .removeChild(document.getElementById('tbodyValidar'))
     } else {
       console.log('no existe tbody')
     }
@@ -142,46 +184,132 @@ const Home = () => {
     }
 
     setLoading(true)
+    setMsgError('')
+    setDebeIngresarDatos2(false)
 
-    let url = 'http://localhost:3001/tabla'
-    try {
-      const respuesta = await axios({
-        method: 'get',
-        url: url,
-        // headers: {
-        //   Authorization: `Bearer ${JSON.parse(dataLocalStorage).accesToken}`,
-        // },
-        // data: {
-        //   nombres: nombres,
-        //   documento: dni,
-        // },
-      })
 
-      if (tbody > 0) {
-        // el tbody tiene hijos
-        console.log('el tbody tiene hijos')
-      } else {
-        // el tbody no tiene hijos
-        console.log('el tbody no tiene hijos')
-        let row, cell
-        for (let i = 0; i < respuesta.data.data.length; i++) {
-          row = document.createElement('tr')
-          tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
-          for (let propiedad in respuesta.data.data[i]) {
-            cell = document.createElement('td')
-            cell.textContent = `${respuesta.data.data[i][propiedad]}`
-            row.appendChild(cell)
-          }
+    if (dniValidMigra !== '') {
+      let url = 'https://api.mundosantanatura.com/api/Room/ListValidationStatus'
+      try {
+        const respuesta = await axios({
+          method: 'post',
+          url: url,
+          headers: {
+            Authorization: `Bearer ${JSON.parse(dataLocalStorage).accesToken}`,
+          },
+          data: {
+            idCliente: '',
+            documento: dniValidMigra,
+          },
+        })
+
+        if (tbody > 0) {
+          // el tbody tiene hijos
+          console.log('el tbody tiene hijos')
+        } else {     
+          setMsgError(respuesta.data.message)
+          // el tbody no tiene hijos
+          console.log('el tbody no tiene hijos')
+          let row, cell
+          for (let i = 0; i < respuesta.data.data.length; i++) {
+            console.log('entré en for (let i = 0; i < resultadito.length; i++)')
+            row = document.createElement('tr')
+            tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
+            console.log(respuesta.data.data[i])
+            let myObject = respuesta.data.data[i]
+            //Para cuando se necesite eliminar algunos campos del objeto.
+            var {ticket, ...myUpdateObject} = myObject;
+            for (let propiedad in myUpdateObject) {
+              console.log(myUpdateObject[propiedad])
+              cell = document.createElement('td')
+              cell.textContent = `${myUpdateObject[propiedad]}`
+              row.appendChild(cell)
+            }
+          }         
         }
+      } catch (error) {
+        console.log(error)
       }
-    } catch (error) {
-      console.log(error)
+    } else {
+      setDebeIngresarDatos2(true)
+      console.log('debeIngresarDatos es true')
     }
+
     setLoading(false)
   }
 
   const consultarEstadoCompras = async (e) => {
-    console.log('first')
+    e.preventDefault()
+
+    if (document.getElementById('tbodyEstadoCompras')) {
+      document
+        .getElementById('idTableEstadoCompras')
+        .removeChild(document.getElementById('tbodyEstadoCompras'))
+    } else {
+      console.log('no existe tbodyEstadoCompras')
+    }
+    let tabla = document.getElementById('idTableEstadoCompras')
+    let tbody = document.createElement('tbody')
+    tbody.setAttribute('id', 'tbodyEstadoCompras')
+    tabla.appendChild(tbody)
+    let tablaTbody = document.getElementById('tbodyEstadoCompras')
+
+    if (tablaTbody.childElementCount > 0) {
+      tablaTbody.parentNode.removeChild(tablaTbody)
+    }
+
+    setLoading(true)
+    setMsgError('')
+    setDebeIngresarDatos3(false)
+
+    if (dniEstadoCompras !== '' || ticket !== '') {
+      let url = 'https://api.mundosantanatura.com/api/Room/ListStatePurchases'
+      try {
+        const respuesta = await axios({
+          method: 'post',
+          url: url,
+          headers: {
+            Authorization: `Bearer ${JSON.parse(dataLocalStorage).accesToken}`,
+          },
+          data: {
+            ticket: ticket,
+            documento: dniEstadoCompras,
+            idCliente: JSON.parse(dataLocalStorage).idClient
+          },
+        })
+
+        if (tbody > 0) {
+          // el tbody tiene hijos
+          console.log('el tbody tiene hijos')
+        } else {
+          setMsgError(respuesta.data.message)
+          // el tbody no tiene hijos
+          console.log('el tbody no tiene hijos')
+          let row, cell
+          for (let i = 0; i < respuesta.data.data.length; i++) {
+            console.log('entré en for (let i = 0; i < resultadito.length; i++)')
+            row = document.createElement('tr')
+            tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
+            console.log(respuesta.data.data[i])
+            let myObject = respuesta.data.data[i]
+            //Para cuando se necesite eliminar algunos campos del objeto.
+            var {idCliente, ...myUpdateObject} = myObject;
+            for (let propiedad in myUpdateObject) {
+              console.log(myUpdateObject[propiedad])
+              cell = document.createElement('td')
+              cell.textContent = `${myUpdateObject[propiedad]}`
+              row.appendChild(cell)
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      setDebeIngresarDatos3(true)
+      console.log('debeIngresarDatos es true')
+    }
+    setLoading(false)
   }
 
   return (
@@ -199,153 +327,378 @@ const Home = () => {
         </nav>
       </header>
 
-      {!!dataLocalStorage &&
-      JSON.parse(dataLocalStorage).name === 'RONALD ANTONIO' ? (
-        <main className="mainQueries">
-          <TextReveal nombres={JSON.parse(dataLocalStorage).name} />
-          <section className="ac-container">
-            <div>
-              <input
-                id="ac-1"
-                name="accordion-1"
-                type="radio"
-                defaultChecked=""
+      
+      {/* {!!dataLocalStorage &&
+      JSON.parse(dataLocalStorage).name === 'WILLMEYRY' ? (<p>Bloque</p>) : null} */}
+
+      <main className="mainQueries" id='bloque01' style={{display: 'none'}}>
+        <TextReveal textSpan3='la información de los socios.' nombres={(dataLocalStorage) ? JSON.parse(dataLocalStorage).name : null} />
+        <section className="ac-container">
+          <div>
+            <input
+              id="ac-1"
+              name="accordion-1"
+              type="radio"
+              defaultChecked=""
+            />
+            <label htmlFor="ac-1">Estado actual del cliente</label>
+            <article className="ac-small">
+              <form className="form" onSubmit={consultarDataCliente}>
+                <section className="sectionInputsFiltrar">
+                  <div className="input-container">
+                    {debeIngresarDatos && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="dni"
+                      placeholder="Ingrese el DNI"
+                      type="text"
+                      setDni={setDni}
+                      setDebeIngresarDatos={setDebeIngresarDatos}
+                      //  setResultadito={setResultadito}
+                    />
+                    <label htmlFor="dni" className="label">
+                      DNI:
+                    </label>
+                  </div>
+                  <div className="input-container">
+                    {debeIngresarDatos && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="nombres"
+                      placeholder="Ingrese nombres y apellidos"
+                      type="text"
+                      setNombres={setNombres}
+                      setDebeIngresarDatos={setDebeIngresarDatos}
+                    />
+                    <label htmlFor="nombres" className="label">
+                      NOMBRES - APELLIDOS:
+                    </label>
+                  </div>
+                  <div className="btn">
+                    <Boton 
+                      id="Filtrar"
+                      value="Filtrar"
+                    />
+                  </div>
+                </section>
+              </form>
+              <TableQueries
+                idTabla="idTableFiltrar"
+                data={[
+                  'Estado',
+                  'Id Cliente',
+                  'Última compra',
+                  'Puntos',
+                  'Puntos Periodo',
+                  'Id Periodo',
+                ]}
               />
-              <label htmlFor="ac-1">Estado actual del cliente</label>
-              <article className="ac-small">
-                <form className="form" onSubmit={(consultarDataCliente)}>
-                  <section className="sectionInputsFiltrar">
-                    <div className="input-container">
-                      {debeIngresarDatos && <span class="tooltiptext">Ingrese el dato</span>}
-                      <Inputs
-                        id="dni"
-                        placeholder="Ingrese el DNI"
-                        type="text"
-                        setDni={setDni}
-                        setDebeIngresarDatos={setDebeIngresarDatos}
-                        //  setResultadito={setResultadito}
-                      />
-                      <label htmlFor="dni" className="label">
-                        DNI:
-                      </label>
-                    </div>
-                    <div className="input-container">
-                      {debeIngresarDatos && <span class="tooltiptext">Ingrese el dato</span>}
-                      <Inputs
-                        id="nombres"
-                        placeholder="Ingrese nombres y apellidos"
-                        type="text"
-                        setNombres={setNombres}
-                        setDebeIngresarDatos={setDebeIngresarDatos}
-                      />
-                      <label htmlFor="nombres" className="label">
-                        NOMBRES - APELLIDOS:
-                      </label>
-                    </div>
-                    <div className="btn">
-                      <Boton id="Filtrar" />
-                    </div>
-                  </section>
-                </form>
-                <TableQueries
-                  idTabla="idTableFiltrar"
-                  data={['Estado', 'Id Cliente', 'Última compra', 'Puntos', 'Puntos Periodo', 'Id Periodo']}
-                />
-                {loading && <Loader />}
-              </article>
-            </div>
-            <div>
-              <input id="ac-2" name="accordion-1" type="radio" />
-              <label htmlFor="ac-2">Validación de migración</label>
-              <article className="ac-medium">
-                <form className="form" onSubmit={(consultarValidacionMigracion)}>
-                  <section className="sectionInputsFiltrar">
-                    <div className="input-container">
-                      <Inputs
-                        id="dniValidarMigracion"
-                        placeholder="Ingrese el DNI"
-                        type="text"
-                        setDni={setDni}
-                        setNombres={setNombres}
-                        // setDni2={setDni2}
-                      />
-                      <label htmlFor="dniValidarMigracion" className="label">
-                        DNI:
-                      </label>
-                    </div>
+              {loading && <Loader />}
+            </article>
+          </div>
+          <div>
+            <input id="ac-2" name="accordion-1" type="radio" />
+            <label htmlFor="ac-2">Validación de migración</label>
+            <article className="ac-small">
+              <form className="form" onSubmit={consultarValidacionMigracion}>
+                <section className="sectionInputsFiltrar">
+                  <div className="input-container">
+                    {debeIngresarDatos2 && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="dniValidarMigracion"
+                      placeholder="Ingrese el DNI"
+                      type="text"
+                      setDniValidMigra={setDniValidMigra}
+                      // setNombres={setNombres}
+                      // setDni2={setDni2}
+                      setDebeIngresarDatos={setDebeIngresarDatos}
+                      setDebeIngresarDatos2={setDebeIngresarDatos2}
+                    />
+                    <label htmlFor="dniValidarMigracion" className="label">
+                      DNI:
+                    </label>
+                  </div>
 
-                    <div className="btn">
-                      <Boton
-                        id="Validar"
-                      />
-                    </div>
-                  </section>
-                </form>
-                <TableQueries
-                  idTabla="idTableValidar"
-                  data={['Id Cliente', 'Tipo Socio', 'Última compra']}
-                />
-                {loading && <Loader />}
-              </article>
-            </div>
-          </section>
-        </main>
-      ) : null}
+                  <div className="btn">
+                    <Boton 
+                      id="Validar"
+                      value="Validar"
+                    />
+                  </div>
+                </section>
+              </form>
+              <TableQueries
+                idTabla="idTableValidar"
+                data={['Tipo Cliente', 'Última compra', 'Estado de Compra', 'Id Cliente']}
+              />
+              {loading && <Loader />}
+              {(!!msgError) ? 
+              (
+                <div style={{display:"flex", justifyContent:"center",marginTop:"20px"}}>
+                  <span>{msgError}</span>
+                </div>
+              )
+              : null }
+            </article>
+          </div>
+        </section>
+      </main>
 
-      {/* <TextReveal nombres={JSON.parse(dataLocalStorage).name} /> */}
-      {/* <>
-        {JSON.stringify(result)}
-        </> */}
+      <main className="mainQueries" id='bloque02' style={{display: 'none'}}>
+        <TextReveal textSpan3='el estado de las compras.' nombres={(dataLocalStorage) ? JSON.parse(dataLocalStorage).name : null} />
+        <section className="ac-container">
+          <div>
+            <input id="ac-3" name="accordion-1" type="radio" />
+            <label htmlFor="ac-3">Estado de Compras</label>
+            <article className="ac-small">
+              <form className="form" onSubmit={consultarEstadoCompras}>
+                <section className="sectionInputsFiltrar">
+                  <div className="input-container">
+                    {debeIngresarDatos3 && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="dniEstadoCompras"
+                      placeholder="Ingrese el DNI"
+                      type="text"
+                      setDniEstadoCompras={setDniEstadoCompras}
+                      setDebeIngresarDatos3={setDebeIngresarDatos3}
+                      // setNombres={setNombres}
+                      // setDni2={setDni2}
+                    />
+                    <label htmlFor="dniEstadoCompras" className="label">
+                      DNI:
+                    </label>
+                  </div>
+                  <div className="input-container">
+                    {debeIngresarDatos3 && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="ticketEstadoCompras"
+                      placeholder="Ingrese el ticket"
+                      type="text"
+                      setTicket={setTicket}
+                      // setNombres={setNombres}
+                      // setDni2={setDni2}
+                      setDebeIngresarDatos3={setDebeIngresarDatos3}
+                    />
+                    <label htmlFor="ticketEstadoCompras" className="label">
+                      Ticket:
+                    </label>
+                  </div>
+                  <div className="btn">
+                    <Boton
+                      id="ValidarEstadoCompras"
+                      value="Validar"
+                      // funcion={consultarEstadoCompras}
+                    />
+                  </div>
+                </section>
+              </form>
 
-      {!!dataLocalStorage &&
-      JSON.parse(dataLocalStorage).name === 'RAQUEL' ? (
-        <main className="mainQueries">
-          <TextReveal nombres={JSON.parse(dataLocalStorage).name} />
-          <section className="ac-container">
-            <div>
-              <input id="ac-3" name="accordion-1" type="radio" />
-              <label htmlFor="ac-3">Estado de Compras</label>
-              <article className="ac-medium">
-                <form className="form" onSubmit={(consultarEstadoCompras)}>
-                  <section className="sectionInputsFiltrar">
-                    <div className="input-container">
-                      <Inputs
-                        id="dniEstadoCompras"
-                        placeholder="Ingrese el DNI"
-                        type="text"
-                        // setDni={setDni}
-                        // setNombres={setNombres}
-                        // setDni2={setDni2}
-                      />
-                      <label htmlFor="dniEstadoCompras" className="label">
-                        DNI:
-                      </label>
-                    </div>
-                    <div className="btn">
-                      <Boton
-                        id="ValidarEstadoCompras"
-                        // funcion={consultarEstadoCompras}
-                      />
-                    </div>
-                  </section>
-                </form>
-                
-                <TableQueries
-                  idTabla="idTableEstadoCompras"
-                  data={[
-                    'Ticket',
-                    'Idop',
-                    'Fecha',
-                    'Estado Compra',
-                    'Estado P.E.',
-                  ]}
-                />
-                {loading && <Loader />}
-              </article>
-            </div>
-          </section>
-        </main>
-      ) : null}
+              <TableQueries
+                idTabla="idTableEstadoCompras"
+                data={[
+                  'Idop',
+                  'Fecha de Creación',
+                  'Estado Compra',
+                  'Estado P.E.',
+                  'Fecha de Pago',
+                  'Ticket',
+                ]}
+              />
+              {loading && <Loader />}
+              {(!!msgError) ? 
+              (
+                <div style={{display:"flex", justifyContent:"center",marginTop:"20px"}}>
+                  <span>{msgError}</span>
+                </div>
+              )
+              : null }
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <main className="mainQueries" id='bloqueAdmi' style={{display: 'none'}}>
+        <TextReveal textSpan3='la información de los socios.' nombres={(dataLocalStorage) ? JSON.parse(dataLocalStorage).name : null} />
+        <section className="ac-container">
+          <div>
+            <input
+              id="ac-1"
+              name="accordion-1"
+              type="radio"
+              defaultChecked=""
+            />
+            <label htmlFor="ac-1">Estado actual del cliente</label>
+            <article className="ac-small">
+              <form className="form" onSubmit={consultarDataCliente}>
+                <section className="sectionInputsFiltrar">
+                  <div className="input-container">
+                    {debeIngresarDatos && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="dni"
+                      placeholder="Ingrese el DNI"
+                      type="text"
+                      setDni={setDni}
+                      setDebeIngresarDatos={setDebeIngresarDatos}
+                      //  setResultadito={setResultadito}
+                    />
+                    <label htmlFor="dni" className="label">
+                      DNI:
+                    </label>
+                  </div>
+                  <div className="input-container">
+                    {debeIngresarDatos && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="nombres"
+                      placeholder="Ingrese nombres y apellidos"
+                      type="text"
+                      setNombres={setNombres}
+                      setDebeIngresarDatos={setDebeIngresarDatos}
+                    />
+                    <label htmlFor="nombres" className="label">
+                      NOMBRES - APELLIDOS:
+                    </label>
+                  </div>
+                  <div className="btn">
+                    <Boton 
+                      id="Filtrar"
+                      value="Filtrar"
+                    />
+                  </div>
+                </section>
+              </form>
+              <TableQueries
+                idTabla="idTableFiltrar"
+                data={[
+                  'Estado',
+                  'Id Cliente',
+                  'Última compra',
+                  'Puntos',
+                  'Puntos Periodo',
+                  'Id Periodo',
+                ]}
+              />
+              {loading && <Loader />}
+            </article>
+          </div>
+          <div>
+            <input id="ac-2" name="accordion-1" type="radio" />
+            <label htmlFor="ac-2">Validación de migración</label>
+            <article className="ac-small">
+              <form className="form" onSubmit={consultarValidacionMigracion}>
+                <section className="sectionInputsFiltrar">
+                  <div className="input-container">
+                    {debeIngresarDatos2 && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="dniValidarMigracion"
+                      placeholder="Ingrese el DNI"
+                      type="text"
+                      setDniValidMigra={setDniValidMigra}
+                      // setNombres={setNombres}
+                      // setDni2={setDni2}
+                      setDebeIngresarDatos={setDebeIngresarDatos}
+                      setDebeIngresarDatos2={setDebeIngresarDatos2}
+                    />
+                    <label htmlFor="dniValidarMigracion" className="label">
+                      DNI:
+                    </label>
+                  </div>
+
+                  <div className="btn">
+                    <Boton 
+                      id="Validar"
+                      value="Validar"
+                    />
+                  </div>
+                </section>
+              </form>
+              <TableQueries
+                idTabla="idTableValidar"
+                data={['Tipo Cliente', 'Última compra', 'Estado de Compra', 'Id Cliente']}
+              />
+              {loading && <Loader />}
+            </article>
+          </div>
+          <div>
+            <input id="ac-3" name="accordion-1" type="radio" />
+            <label htmlFor="ac-3">Estado de Compras</label>
+            <article className="ac-small">
+              <form className="form" onSubmit={consultarEstadoCompras}>
+                <section className="sectionInputsFiltrar">
+                  <div className="input-container">
+                    {debeIngresarDatos3 && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="dniEstadoCompras"
+                      placeholder="Ingrese el DNI"
+                      type="text"
+                      setDniEstadoCompras={setDniEstadoCompras}
+                      setDebeIngresarDatos3={setDebeIngresarDatos3}
+                      // setNombres={setNombres}
+                      // setDni2={setDni2}
+                    />
+                    <label htmlFor="dniEstadoCompras" className="label">
+                      DNI:
+                    </label>
+                  </div>
+                  <div className="input-container">
+                    {debeIngresarDatos3 && (
+                      <span className="tooltiptext">Ingrese el dato</span>
+                    )}
+                    <Inputs
+                      id="ticketEstadoCompras"
+                      placeholder="Ingrese el ticket"
+                      type="text"
+                      setTicket={setTicket}
+                      // setNombres={setNombres}
+                      // setDni2={setDni2}
+                      setDebeIngresarDatos3={setDebeIngresarDatos3}
+                    />
+                    <label htmlFor="ticketEstadoCompras" className="label">
+                      Ticket:
+                    </label>
+                  </div>
+                  <div className="btn">
+                    <Boton
+                      id="ValidarEstadoCompras"
+                      value="Validar"
+                      // funcion={consultarEstadoCompras}
+                    />
+                  </div>
+                </section>
+              </form>
+
+              <TableQueries
+                idTabla="idTableEstadoCompras"
+                data={[
+                  'Idop',
+                  'Fecha de Creación',
+                  'Estado Compra',
+                  'Estado P.E.',
+                  'Fecha de Pago',
+                  'Ticket',
+                ]}
+              />
+              {loading && <Loader />}
+            </article>
+          </div>
+        </section>
+      </main>
+
 
       {/* {JSON.parse(dataLocalStorage).name === 'RAQUEL' ? (
 
