@@ -9,6 +9,8 @@ import Loader from '../../COMPONENTS/Loader/Loader'
 
 import { motion } from 'framer-motion'
 
+import '../../../node_modules/font-awesome/css/font-awesome.min.css'
+
 const Login = () => {
   const navigate = useNavigate()
   const [usuario, setUsuario] = useState('')
@@ -16,6 +18,7 @@ const Login = () => {
   // const [authenticated, setauthenticated] = useState('');
   // const [token, setToken] = useState('');
   const [error, setError] = useState(false)
+  const [isOjitoClassNameActive, setIsOjitoClassNameActive] = useState(true)
 
   const [loading, setLoading] = useState(false)
 
@@ -85,9 +88,9 @@ const Login = () => {
       exit={{ opacity: 0 }}
     >
       <div className="card">
-        <div className='circle'></div>
-        <div className='circle'></div>
-        <div className='card-inner'>
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="card-inner">
           <h1>Iniciar Sesión</h1>
           <form onSubmit={validarLogin}>
             <div className="input-group">
@@ -111,10 +114,10 @@ const Login = () => {
             <div className="input-group">
               <input
                 value={contraseña}
-                type="password"
+                type={`${isOjitoClassNameActive ? 'password' : 'text'}`}
                 id="contraseña"
                 required
-                className="input"
+                className={`input ${isOjitoClassNameActive ? 'active' : ''}`}
                 name="contraseña"
                 onChange={(e) => {
                   setContraseña(e.target.value)
@@ -124,6 +127,9 @@ const Login = () => {
               <label htmlFor="contraseña" className="input-label">
                 Contraseña:
               </label>
+              <div className="divIconEye">
+                <i id="icon" className={`${isOjitoClassNameActive ? 'fa fa-eye-slash' : 'fa fa-eye'}`} onClick={()=>setIsOjitoClassNameActive(!isOjitoClassNameActive)}></i>
+              </div>
             </div>
             {loading && <Loader />}
             <div className="input-spanError">

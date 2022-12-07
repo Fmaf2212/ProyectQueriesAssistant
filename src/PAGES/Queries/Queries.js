@@ -41,12 +41,16 @@ const Home = () => {
 
   const obj = [
     {
-      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C07239') ? JSON.parse(dataLocalStorage).idClient : null}`,
+      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C101532') ? JSON.parse(dataLocalStorage).idClient : null}`,
       lstTabla: ['bloque01']
     },
     {
-      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C13564') ? JSON.parse(dataLocalStorage).idClient : null}`,
+      idSocio: `${(dataLocalStorage && (JSON.parse(dataLocalStorage).idClient==='C016532' || JSON.parse(dataLocalStorage).idClient==='C013564')) ? JSON.parse(dataLocalStorage).idClient : null}`,
       lstTabla: ['bloque02']
+    },
+    {
+      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C007239') ? JSON.parse(dataLocalStorage).idClient : null}`,
+      lstTabla: ['bloqueAdmi']
     }
   ]
 
@@ -75,12 +79,6 @@ const Home = () => {
       });
     }
 
-    // obj.forEach(element => {
-    //   console.log(element)
-    //   if(element.idSocio="C13564"){
-    //     console.log(element)
-    //   }
-    // });
   }, [navigate])
 
   const consultarDataCliente = async (e) => {
@@ -278,11 +276,12 @@ const Home = () => {
           },
         })
 
+        setMsgError(respuesta.data.message)
         if (tbody > 0) {
           // el tbody tiene hijos
           console.log('el tbody tiene hijos')
         } else {
-          setMsgError(respuesta.data.message)
+          console.log(respuesta)
           // el tbody no tiene hijos
           console.log('el tbody no tiene hijos')
           let row, cell
@@ -302,8 +301,15 @@ const Home = () => {
             }
           }
         }
+        
       } catch (error) {
-        console.log(error)
+        let row, cell;
+        row = document.createElement('tr')
+        tbody.appendChild(row)
+        cell = document.createElement('td')
+        cell.setAttribute("colspan", "100")
+        cell.textContent = 'No se ha encontrado registro del cliente o ticket.';
+        row.appendChild(cell)
       }
     } else {
       setDebeIngresarDatos3(true)
@@ -513,13 +519,13 @@ const Home = () => {
                 ]}
               />
               {loading && <Loader />}
-              {(!!msgError) ? 
+              {/* {(!!msgError) ? 
               (
                 <div style={{display:"flex", justifyContent:"center",marginTop:"20px"}}>
                   <span>{msgError}</span>
                 </div>
               )
-              : null }
+              : null } */}
             </article>
           </div>
         </section>
@@ -689,7 +695,7 @@ const Home = () => {
                   'Fecha de Creación',
                   'Estado Compra',
                   'Estado P.E.',
-                  'Fecha de Pago',
+                  'Fecha del Pago',
                   'Ticket',
                 ]}
               />

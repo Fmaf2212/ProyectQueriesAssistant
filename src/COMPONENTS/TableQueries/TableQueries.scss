@@ -25,6 +25,20 @@ $desktop: 1024px;
         color: #ffffff;
         text-align: middle;
       }
+      .styled-table thead tr th.sorting {
+        background-image: url(https://cdn.datatables.net/DataTables-1.10.23/images/sort_both.png);
+      }
+      .styled-table thead tr th.sorting_asc {
+        background-image: url(https://cdn.datatables.net/DataTables-1.10.23/images/sort_asc.png);
+      }
+      .styled-table thead tr th.sorting_desc {
+        background-image: url(https://cdn.datatables.net/DataTables-1.10.23/images/sort_desc.png);
+      }
+      .styled-table thead tr th {
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: center right;
+      }
       .styled-table th,
       .styled-table td {
         padding: 12px 15px;
