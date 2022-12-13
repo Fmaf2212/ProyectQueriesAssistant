@@ -74,7 +74,7 @@ const TableQueries = (props) => {
     }
   }
 
-  let th = document.querySelector(`#${props.idTabla} thead tr th`);
+  // let th = document.querySelector(`#${props.idTabla} thead tr th`);
 
 
 
