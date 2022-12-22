@@ -6,7 +6,8 @@ import logout from '../../BASE/img/logout.png'
 
 import { deleteToken } from '../../PAGES/Helpers/auth-helpers'
 
-const Logout = () => {
+const Logout = () => { 
+  
   const navigate = useNavigate()
 
   const clickLogout = () => {
