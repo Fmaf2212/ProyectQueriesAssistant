@@ -18,6 +18,7 @@ import { motion } from 'framer-motion'
 import Loader from '../../COMPONENTS/Loader/Loader'
 import Logout from '../../COMPONENTS/Logout/Logout'
 import Footer from '../../COMPONENTS/Footer/Footer'
+import { useMemo } from 'react'
 
 initAxiosInterceptors()
 
@@ -39,47 +40,48 @@ const Home = () => {
 
   const dataLocalStorage = getToken()
 
-  const obj = [
+  const obj = useMemo(()=>[
     {
-      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C101532') ? JSON.parse(dataLocalStorage).idClient : null}`,
+      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C102944') ? JSON.parse(dataLocalStorage).idClient : null}`,
       lstTabla: ['bloque01']
     },
     {
-      idSocio: `${(dataLocalStorage && (JSON.parse(dataLocalStorage).idClient==='C016532' || JSON.parse(dataLocalStorage).idClient==='C013564')) ? JSON.parse(dataLocalStorage).idClient : null}`,
+      idSocio: `${(dataLocalStorage && (JSON.parse(dataLocalStorage).idClient==='C036734' || JSON.parse(dataLocalStorage).idClient==='C016532')) ? JSON.parse(dataLocalStorage).idClient : null}`,
       lstTabla: ['bloque02']
     },
     {
-      idSocio: `${(dataLocalStorage && JSON.parse(dataLocalStorage).idClient==='C007239') ? JSON.parse(dataLocalStorage).idClient : null}`,
+      idSocio: `${(dataLocalStorage && (JSON.parse(dataLocalStorage).idClient==='C007239' || JSON.parse(dataLocalStorage).idClient==='C103224')) ? JSON.parse(dataLocalStorage).idClient : null}`,
       lstTabla: ['bloqueAdmi']
     }
-  ]
+  ],[dataLocalStorage])
 
   useEffect(() => {
-    console.log('entré en useEffect')
+    
+    // console.log('entré en useEffect')
     const loggedInUser = window.localStorage.getItem(
       'loggedQueriesAssistantUser',
     )
 
     if (!loggedInUser) {
-      console.log('no hay token')
+      // console.log('no hay token')
       navigate('/')
     }
 
 
     if(!!dataLocalStorage){
-      obj.forEach(element => {
-        console.log(element);
-      });
+      // obj.forEach(element => {
+      //   console.log(element);
+      // });
       
       const existeUsuario = obj.findIndex(usu  => usu.idSocio === JSON.parse(dataLocalStorage).idClient);
       const objUsuSeleccionado = obj[existeUsuario];
       (objUsuSeleccionado.lstTabla).forEach(element => {
-        console.log(element)
+        // console.log(element)
         document.getElementById(element).style.display="block";
       });
     }
 
-  }, [navigate])
+  }, [dataLocalStorage,navigate,obj])
 
   const consultarDataCliente = async (e) => {
     e.preventDefault()
@@ -89,7 +91,7 @@ const Home = () => {
         .getElementById('idTableFiltrar')
         .removeChild(document.getElementById('tbody'))
     } else {
-      console.log('no existe tbody')
+      // console.log('no existe tbody')
     }
     let tabla = document.getElementById('idTableFiltrar')
     let tbody = document.createElement('tbody')
@@ -118,43 +120,37 @@ const Home = () => {
             documento: dni,
           },
         })
-
-        if (tbody > 0) {
-          // el tbody tiene hijos
-          console.log('el tbody tiene hijos')
-        } else {
-          // el tbody no tiene hijos
-          console.log('el tbody no tiene hijos')
-          let row, cell
-          for (let i = 0; i < respuesta.data.data.length; i++) {
-            console.log('entré en for (let i = 0; i < resultadito.length; i++)')
-            row = document.createElement('tr')
-            tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
-            console.log(respuesta.data.data[i])
-            let myObject = respuesta.data.data[i]
-            // Para cuando se necesite eliminar algunos campos del objeto.
-            // var {puntosPeriodo, idPeriodo, ...myUpdateObject} = myObject;
-            // for (let propiedad in myUpdateObject) {
-            //   console.log(myUpdateObject[propiedad])
-            //   cell = document.createElement('td')
-            //   cell.textContent = `${myUpdateObject[propiedad]}`
-            //   row.appendChild(cell)
-            // }
-            // Para cuando no se necesite eliminar campos del objeto.
-            for (let propiedad in myObject) {
-              console.log(myObject[propiedad])
-              cell = document.createElement('td')
-              cell.textContent = `${myObject[propiedad]}`
-              row.appendChild(cell)
-            }
+        console.log(respuesta)
+        let row, cell
+        for (let i = 0; i < respuesta.data.data.length; i++) {
+          // console.log('entré en for (let i = 0; i < resultadito.length; i++)')
+          row = document.createElement('tr')
+          tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
+          // console.log(respuesta.data.data[i])
+          let myObject = respuesta.data.data[i]
+          // Para cuando se necesite eliminar algunos campos del objeto.
+          // var {puntosPeriodo, idPeriodo, ...myUpdateObject} = myObject;
+          // for (let propiedad in myUpdateObject) {
+          //   console.log(myUpdateObject[propiedad])
+          //   cell = document.createElement('td')
+          //   cell.textContent = `${myUpdateObject[propiedad]}`
+          //   row.appendChild(cell)
+          // }
+          // Para cuando no se necesite eliminar campos del objeto.
+          for (let propiedad in myObject) {
+            // console.log(myObject[propiedad])
+            cell = document.createElement('td')
+            cell.textContent = `${myObject[propiedad]}`
+            row.appendChild(cell)
           }
         }
+        
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     } else {
       setDebeIngresarDatos(true)
-      console.log('debeIngresarDatos es true')
+      // console.log('debeIngresarDatos es true')
     }
     setLoading(false)
   }
@@ -203,22 +199,22 @@ const Home = () => {
 
         if (tbody > 0) {
           // el tbody tiene hijos
-          console.log('el tbody tiene hijos')
+          // console.log('el tbody tiene hijos')
         } else {     
           setMsgError(respuesta.data.message)
           // el tbody no tiene hijos
-          console.log('el tbody no tiene hijos')
+          // console.log('el tbody no tiene hijos')
           let row, cell
           for (let i = 0; i < respuesta.data.data.length; i++) {
-            console.log('entré en for (let i = 0; i < resultadito.length; i++)')
+            // console.log('entré en for (let i = 0; i < resultadito.length; i++)')
             row = document.createElement('tr')
             tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
-            console.log(respuesta.data.data[i])
+            // console.log(respuesta.data.data[i])
             let myObject = respuesta.data.data[i]
             //Para cuando se necesite eliminar algunos campos del objeto.
             var {ticket, ...myUpdateObject} = myObject;
             for (let propiedad in myUpdateObject) {
-              console.log(myUpdateObject[propiedad])
+              // console.log(myUpdateObject[propiedad])
               cell = document.createElement('td')
               cell.textContent = `${myUpdateObject[propiedad]}`
               row.appendChild(cell)
@@ -230,7 +226,7 @@ const Home = () => {
       }
     } else {
       setDebeIngresarDatos2(true)
-      console.log('debeIngresarDatos es true')
+      // console.log('debeIngresarDatos es true')
     }
 
     setLoading(false)
@@ -279,22 +275,22 @@ const Home = () => {
         setMsgError(respuesta.data.message)
         if (tbody > 0) {
           // el tbody tiene hijos
-          console.log('el tbody tiene hijos')
+          // console.log('el tbody tiene hijos')
         } else {
-          console.log(respuesta)
+          // console.log(respuesta)
           // el tbody no tiene hijos
-          console.log('el tbody no tiene hijos')
+          // console.log('el tbody no tiene hijos')
           let row, cell
           for (let i = 0; i < respuesta.data.data.length; i++) {
-            console.log('entré en for (let i = 0; i < resultadito.length; i++)')
+            // console.log('entré en for (let i = 0; i < resultadito.length; i++)')
             row = document.createElement('tr')
             tbody.appendChild(row) //crea la cantidad de elementos tr según props.resultado.length
-            console.log(respuesta.data.data[i])
+            // console.log(respuesta.data.data[i])
             let myObject = respuesta.data.data[i]
             //Para cuando se necesite eliminar algunos campos del objeto.
             var {idCliente, ...myUpdateObject} = myObject;
             for (let propiedad in myUpdateObject) {
-              console.log(myUpdateObject[propiedad])
+              // console.log(myUpdateObject[propiedad])
               cell = document.createElement('td')
               cell.textContent = `${myUpdateObject[propiedad]}`
               row.appendChild(cell)
@@ -313,7 +309,7 @@ const Home = () => {
       }
     } else {
       setDebeIngresarDatos3(true)
-      console.log('debeIngresarDatos es true')
+      // console.log('debeIngresarDatos es true')
     }
     setLoading(false)
   }
@@ -395,7 +391,7 @@ const Home = () => {
                 data={[
                   'Estado',
                   'Id Cliente',
-                  'Última compra',
+                  'Última compra >20ptos',
                   'Puntos',
                   'Puntos Periodo',
                   'Id Periodo',
@@ -536,12 +532,12 @@ const Home = () => {
         <section className="ac-container">
           <div>
             <input
-              id="ac-1"
+              id="ac-1_Admi"
               name="accordion-1"
               type="radio"
               defaultChecked=""
             />
-            <label htmlFor="ac-1">Estado actual del cliente</label>
+            <label htmlFor="ac-1_Admi">Estado actual del cliente</label>
             <article className="ac-small">
               <form className="form" onSubmit={consultarDataCliente}>
                 <section className="sectionInputsFiltrar">
@@ -599,8 +595,8 @@ const Home = () => {
             </article>
           </div>
           <div>
-            <input id="ac-2" name="accordion-1" type="radio" />
-            <label htmlFor="ac-2">Validación de migración</label>
+            <input id="ac-2_Admi" name="accordion-1" type="radio" />
+            <label htmlFor="ac-2_Admi">Validación de migración</label>
             <article className="ac-small">
               <form className="form" onSubmit={consultarValidacionMigracion}>
                 <section className="sectionInputsFiltrar">
@@ -639,8 +635,8 @@ const Home = () => {
             </article>
           </div>
           <div>
-            <input id="ac-3" name="accordion-1" type="radio" />
-            <label htmlFor="ac-3">Estado de Compras</label>
+            <input id="ac-3_Admi" name="accordion-1" type="radio" />
+            <label htmlFor="ac-3_Admi">Estado de Compras</label>
             <article className="ac-small">
               <form className="form" onSubmit={consultarEstadoCompras}>
                 <section className="sectionInputsFiltrar">

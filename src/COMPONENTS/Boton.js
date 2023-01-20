@@ -16,7 +16,7 @@ const boton = ({id, funcion, value}) => {
       }
   return (
     <input
-      // onMouseEnter={(e) => alPasarPuntero(e)}
+      onMouseEnter={(e) => alPasarPuntero(e)}
       id={id}
       className="inputFiltrar"
       type="submit"

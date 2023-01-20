@@ -15,8 +15,8 @@ const Inputs = ({
 }) => {
   useEffect(() => {
     const dni = document.getElementById(`${id}`)
-    const nombres = document.getElementById('nombres')
-    const dniValidarMigracion = document.getElementById('dniValidarMigracion')
+    // const nombres = document.getElementById('nombres')
+    // const dniValidarMigracion = document.getElementById('dniValidarMigracion')
     dni.addEventListener('blur', (event) => {
       if (event.target.value === '') {
         event.target.nextElementSibling.classList.remove('filled')
